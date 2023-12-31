@@ -71,18 +71,42 @@ function loadImage() {
         (stone, index) => stone.src = `assets/stone/rock_${index}.png`
     );
 
-    let canInterval = setInterval(() => {
-        CANVAS_HEIGHT = CANVAS_HEIGHT - 50;
-        CANVAS_WIDTH = CANVAS_WIDTH - 50;
+    loadCharacter();
 
-        if(CANVAS_HEIGHT < 50) {
-            clearInterval(canInterval);
-        }
+    // let canInterval = setInterval(() => {
+    //     CANVAS_HEIGHT = CANVAS_HEIGHT - 50;
+    //     CANVAS_WIDTH = CANVAS_WIDTH - 50;
 
-        canvas.height  = CANVAS_HEIGHT;
-        canvas.width  = CANVAS_WIDTH;
-    }, 1000 * 60 * 1)
+    //     if(CANVAS_HEIGHT < 50) {
+    //         clearInterval(canInterval);
+    //     }
 
+    //     canvas.height  = CANVAS_HEIGHT;
+    //     canvas.width  = CANVAS_WIDTH;
+    // }, 1000 * 60 * 1)
+
+}
+
+function randomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function loadCharacter() {
+    let posX = randomInteger(0,600);
+    let posY = randomInteger(0,600);
+    if(obstacles.every(
+        obstacle => 
+        (
+            Math.abs(posX - obstacle.stoneX) > 40
+            ||
+            Math.abs(posY - obstacle.stoneY) > 40
+        )
+    )){
+        positionX = posX;
+        positionY = posY;
+    }else{
+        loadCharacter();
+    }
 }
 
 function drawFrame(frameX, frameY, canvasX, canvasY) {
@@ -168,24 +192,24 @@ function gameLoop() {
         case FACING_DOWN:
             obstacles.push({
                 stoneX: positionX,
-                stoneY: positionY + 45
+                stoneY: positionY + 35
             });
             break;
         case FACING_UP:
             obstacles.push({
                 stoneX: positionX,
-                stoneY: positionY - 45
+                stoneY: positionY - 35
             });
             break;
         case FACING_LEFT:
             obstacles.push({
-                stoneX: positionX - 45,
+                stoneX: positionX - 35,
                 stoneY: positionY
             });
             break;
         case FACING_RIGHT:
             obstacles.push({
-                stoneX: positionX + 45,
+                stoneX: positionX + 35,
                 stoneY: positionY
             });
             break;
