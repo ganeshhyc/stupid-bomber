@@ -1,15 +1,11 @@
+const joined = new Map();
+let joinedIds = [];
+
 const socketIO = io('https://lime-quasar-minibus.glitch.me', { transports : ['websocket'] });
 let myId = null;
 
-const joined = new Map();
-const joinedIds = [];
-
 socketIO.on('connection', (socket) => {
     console.log('a user connected');
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-
 });
 
 socketIO.on('path:id', (id) => {
@@ -23,6 +19,25 @@ socketIO.on('path:id', (id) => {
         myId = id;
     }
 });
+
+socketIO.on('path:disconnected', (id) => {
+    joinedIds = joinedIds.filter(j => j!==id);
+});
+
+socketIO.on('path:joined', (joinedArray) => {
+    joinedIds = [];
+    joinedArray.forEach(player => {
+        if(player.id!==myId){
+            joinedIds.push(player.id)
+            joined.set(player.id, {x: player.x, y: player.y})
+        }
+    });
+});
+
+window.onbeforeunload = function(e) {
+    // socketIO.disconnect();
+    socketIO.emit('disconnect',myId);
+};
 
 function join(name) {
     // if(){}
