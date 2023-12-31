@@ -1,7 +1,8 @@
 const socketIO = io('https://lime-quasar-minibus.glitch.me', { transports : ['websocket'] });
 let myId = null;
 
-// const joined = [];
+const joined = new Map();
+const joinedIds = [];
 
 socketIO.on('connection', (socket) => {
     console.log('a user connected');
@@ -13,7 +14,11 @@ socketIO.on('connection', (socket) => {
 
 socketIO.on('path:id', (id) => {
     if(myId){
-        // new join
+        joined.set(id, { x: 0, y: 0 });
+        joinedIds.push(id);
+        socketIO.on(`path:position:${id}`, ({ x, y }) => {
+            joined.set(id, { x, y })
+        });
     }else{
         myId = id;
     }
@@ -25,7 +30,10 @@ function join(name) {
         id: myId,
         name
     });
+}
 
+function changePosition(x, y) {
+    socketIO.emit(`path:position`, { id: myId, x, y });
 }
 
 function sendPlayerPosition(msg){

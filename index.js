@@ -115,6 +115,13 @@ function drawFrame(frameX, frameY, canvasX, canvasY) {
                 frameX * WIDTH, frameY * HEIGHT, WIDTH, HEIGHT,
                 canvasX, canvasY, SCALED_WIDTH, SCALED_HEIGHT);
 
+    joinedIds.forEach(
+        player => ctx.drawImage(img,
+            frameX * WIDTH, frameY * HEIGHT, WIDTH, HEIGHT,
+            joined.get(player).x, joined.get(player).y, SCALED_WIDTH, SCALED_HEIGHT)
+    )
+
+
     if(bombPlanted){
         if(currentPower === 'DROP'){
             ctx.drawImage(bombImage,
@@ -291,6 +298,7 @@ function moveCharacter(deltaX, deltaY, direction) {
         positionY + SCALED_HEIGHT + deltaY > obstacle.stoneY + 64
     ))) {
     positionX += deltaX;
+    changePosition(positionX, positionY);
   }
   if (
     positionY + deltaY > 0
@@ -307,6 +315,7 @@ function moveCharacter(deltaX, deltaY, direction) {
         positionX + SCALED_WIDTH + deltaX > obstacle.stoneX + 64
     ))) {
     positionY += deltaY;
+    changePosition(positionX, positionY);
   }
   currentDirection = direction;
 }

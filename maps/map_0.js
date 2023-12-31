@@ -3,7 +3,7 @@
  */
 const mapMetaArray = [
     {
-        stoneX: 0,
+        stoneX: 200,
         stoneY: 0
     },
     {
