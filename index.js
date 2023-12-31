@@ -36,6 +36,7 @@ let positionX = 0;
 let positionY = 0;
 let wallMade = false;
 let img = new Image();
+let renderInerval;
 
 let powers = ['DROP', 'THROW'];
 currentPower = powers[0];
@@ -60,7 +61,8 @@ function loadImage() {
     
     img.src = 'assets/bustling/bustling.png';
     img.onload = function() {
-        window.requestAnimationFrame(gameLoop);
+        // window.requestAnimationFrame(gameLoop);
+        renderInerval = setInterval(gameLoop, 1000/60);
     };
     // d3.json("maps/map_0.json").then(function(obstaclesMeta) {
     // });
@@ -279,7 +281,7 @@ function gameLoop() {
   }
 
   drawFrame(CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY);
-  window.requestAnimationFrame(gameLoop);
+//   window.requestAnimationFrame(gameLoop);
 }
 
 function moveCharacter(deltaX, deltaY, direction) {
